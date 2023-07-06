@@ -48,7 +48,7 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-04-01-
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
-  name: '${defaultResourceName}-kv'
+  name: defaultResourceName
   location: location
   properties: {
     sku: {
@@ -59,5 +59,16 @@ resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
     enabledForDeployment: true
     enabledForTemplateDeployment: true
     enableRbacAuthorization: true
+  }
+}
+
+resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-12-01' = {
+  name: replace(defaultResourceName, '-', '')
+  location: location
+  sku: {
+    name: 'Standard'
+  }
+  properties: {
+    adminUserEnabled: true
   }
 }
