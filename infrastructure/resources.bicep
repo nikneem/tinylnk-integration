@@ -72,3 +72,16 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-12-01' =
     adminUserEnabled: true
   }
 }
+
+resource serviceBus 'Microsoft.ServiceBus/namespaces@2022-10-01-preview' = {
+  name: '${defaultResourceName}-bus'
+  location: location
+  sku: {
+    name: 'Standard'
+    tier: 'Standard'
+  }
+
+  resource queue 'queues' = {
+    name: 'hits'
+  }
+}
