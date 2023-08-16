@@ -1,7 +1,7 @@
 param location string
 
 var systemName = 'tinylnk-integration'
-var defaultResourceName = '${systemName}-we'
+var defaultResourceName = '${systemName}-ne'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   name: uniqueString(defaultResourceName)

@@ -39,4 +39,4 @@ jobs:
         id: arm
         uses: Azure/cli@v1
         with:
-          inlineScript: az deployment sub create --name tinylink-integration --location westeurope --template-file ./infrastructure/main.json
+          inlineScript: az deployment sub create --name tinylink-integration --location northeurope --template-file ./infrastructure/main.json

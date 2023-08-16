@@ -4,7 +4,7 @@ param location string = deployment().location
 
 var systemName = 'tinylnk-integration'
 
-var defaultResourceName = '${systemName}-we'
+var defaultResourceName = '${systemName}-ne'
 
 resource targetResourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: defaultResourceName
