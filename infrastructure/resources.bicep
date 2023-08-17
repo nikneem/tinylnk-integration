@@ -3,9 +3,6 @@ param location string
 var systemName = 'tinylnk-integration'
 var defaultResourceName = '${systemName}-ne'
 
-var apexHostName = 'tinylnk.nl'
-var apiHostName = 'api.tinylnk.nl'
-
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   name: uniqueString(defaultResourceName)
   location: location
@@ -48,23 +45,6 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-04-01-
       }
     }
   }
-  resource apexManagedCertificate 'managedCertificates' = {
-    name: '${replace(apexHostName, '.', '-')}-cert'
-    location: location
-    properties: {
-      domainControlValidation: 'HTTP'
-      subjectName: apexHostName
-    }
-  }
-  resource apiManagedCertificate 'managedCertificates' = {
-    name: '${replace(apiHostName, '.', '-')}-cert'
-    location: location
-    properties: {
-      domainControlValidation: 'CNAME'
-      subjectName: apiHostName
-    }
-  }
-
 }
 
 resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
