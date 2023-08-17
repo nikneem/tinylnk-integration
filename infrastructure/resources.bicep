@@ -57,7 +57,7 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-04-01-
     }
   }
   resource apiManagedCertificate 'managedCertificates' = {
-    name: '${replace(apexHostName, '.', '-')}-cert'
+    name: '${replace(apiHostName, '.', '-')}-cert'
     location: location
     properties: {
       domainControlValidation: 'CNAME'
