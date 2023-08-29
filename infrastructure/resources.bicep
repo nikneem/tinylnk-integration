@@ -80,8 +80,4 @@ resource serviceBus 'Microsoft.ServiceBus/namespaces@2022-10-01-preview' = {
     name: 'Standard'
     tier: 'Standard'
   }
-
-  resource queue 'queues' = {
-    name: 'hits'
-  }
 }
