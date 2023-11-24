@@ -3,6 +3,16 @@ param location string
 var systemName = 'tinylnk-integration'
 var defaultResourceName = '${systemName}-ne'
 
+var integrationEnvironment = {
+  resourceGroupName: 'mvp-int-env'
+  containerRegistryName: 'nvv54gsk4pteu'
+  applicationInsights: 'mvp-int-env-ai'
+  appConfiguration: 'mvp-int-env-appcfg'
+  keyVault: 'mvp-int-env-kv'
+  logAnalytics: 'mvp-int-env-log'
+  serviceBus: 'mvp-int-env-bus'
+}
+
 resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   name: uniqueString(defaultResourceName)
   location: location
@@ -12,25 +22,9 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = {
   kind: 'StorageV2'
 }
 
-resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
-  name: '${defaultResourceName}-log'
-  location: location
-  properties: {
-    sku: {
-      name: 'PerGB2018'
-    }
-  }
-}
-
-resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: '${defaultResourceName}-ai'
-  location: location
-  kind: 'web'
-  properties: {
-    Application_Type: 'web'
-    IngestionMode: 'LogAnalytics'
-    WorkspaceResourceId: logAnalyticsWorkspace.id
-  }
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2022-10-01' existing = {
+  name: integrationEnvironment.logAnalytics
+  scope: resourceGroup(integrationEnvironment.resourceGroupName)
 }
 
 resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-04-01-preview' = {
@@ -44,40 +38,5 @@ resource containerAppsEnvironment 'Microsoft.App/managedEnvironments@2023-04-01-
         sharedKey: logAnalyticsWorkspace.listKeys().primarySharedKey
       }
     }
-  }
-}
-
-resource keyVault 'Microsoft.KeyVault/vaults@2023-02-01' = {
-  name: defaultResourceName
-  location: location
-  properties: {
-    sku: {
-      family: 'A'
-      name: 'standard'
-    }
-    tenantId: subscription().tenantId
-    enabledForDeployment: true
-    enabledForTemplateDeployment: true
-    enableRbacAuthorization: true
-  }
-}
-
-resource containerRegistry 'Microsoft.ContainerRegistry/registries@2022-12-01' = {
-  name: replace(defaultResourceName, '-', '')
-  location: location
-  sku: {
-    name: 'Standard'
-  }
-  properties: {
-    adminUserEnabled: true
-  }
-}
-
-resource serviceBus 'Microsoft.ServiceBus/namespaces@2022-10-01-preview' = {
-  name: '${defaultResourceName}-bus'
-  location: location
-  sku: {
-    name: 'Standard'
-    tier: 'Standard'
   }
 }
